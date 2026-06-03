@@ -26,18 +26,19 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        // 1. Look for the "Authorization" header in the incoming request
+        // 1. look for header
         String authHeader = request.getHeader("Authorization");
 
-        // 2. Check if it exists and starts with "Bearer " (standard JWT format)
+        // 2. if exists, if it starts with "bearer"
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7); // Strip off the word "Bearer "
+             // Strip "Bearer "
+            String token = authHeader.substring(7);
 
             try {
                 String email = jwtUtil.extractEmail(token);
-                String role = jwtUtil.extractRole(token); // Pull the role right out of the token!
+                String role = jwtUtil.extractRole(token);
 
-                // 3. If the token is valid, tell Spring Security "This user is allowed in!"
+                // 3. If token valid, allow in"
                 if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     if (jwtUtil.validateToken(token, email)) {
                         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
