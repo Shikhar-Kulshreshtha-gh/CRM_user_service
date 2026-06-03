@@ -54,7 +54,6 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
     // 5. LOGIN
-    // POST request to http://localhost:8080/api/users/login
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest request) {
         try {
@@ -64,13 +63,13 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
-
+    //get all users
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
-
+    //get user by id
     @PutMapping("/{id}")
     public ResponseEntity<String> updateProfile(
             @PathVariable java.util.UUID id,
